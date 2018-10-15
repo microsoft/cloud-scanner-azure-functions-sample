@@ -7,4 +7,8 @@ from .. import settings
 
 
 async def main(msg: QueueMessage):
+    """
+    Process payload from queue to store in registered storage provider
+    :param msg: Resource payload from queue
+    """
     ResourceStorage.process_queue_message(msg)

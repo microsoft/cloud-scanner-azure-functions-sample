@@ -7,4 +7,8 @@ from .. import settings
 
 
 def main(msg: QueueMessage):
+    """
+    Process resource payload from queue for tagging
+    :param msg: Resource payload from queue
+    """
     ResourceTagger.process_queue_message(msg)

@@ -7,4 +7,8 @@ from .. import settings
 
 
 async def main(msg: azure.functions.QueueMessage):
+    """
+    Process task message from queue for resource scanning
+    :param msg: Task from queue
+    """
     ResourceScanner.process_queue_message(msg)
