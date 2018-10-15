@@ -1,6 +1,6 @@
 # Cloud Resource Scanner - Azure Function App
 
-This is an example Azure Function App that demonstrates the use of the [cloud-scanner]() library and its providers. [cloud-scanner]() is a Python package that pulls cloud resources from different providers (Azure, AWS, GCP) and puts the metadata into data stores.
+This is an example Azure Function App that demonstrates the use of the [cloud-scanner](https://github.com/Microsoft/cloud-scanner) library and its providers. [cloud-scanner](https://github.com/Microsoft/cloud-scanner) is a Python package that pulls cloud resources from different providers (Azure, AWS, GCP) and puts the metadata into data stores.
 
 ## Running Locally
 1. Clone necessary repos (this one included) to same directory
