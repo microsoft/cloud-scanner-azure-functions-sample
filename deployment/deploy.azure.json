@@ -1,0 +1,361 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environment": {
+            "type": "string",
+            "defaultValue": "dev",
+            "metadata": {
+                "description": "The environment for this application"
+            }
+        },
+        "prefix": {
+            "type": "string"
+        },
+        "application_name": {
+            "type": "string",
+            "defaultValue": "CloudScanner",
+            "metadata": {
+                "description": "The root application name"
+            }
+        },
+        "application_abbr": {
+            "type": "string",
+            "defaultValue": "CS",
+            "metadata": {
+                "description": "The root application short name"
+            }
+        },
+        "location": {
+            "defaultValue": "westus",
+            "type": "string",
+            "metadata": {
+                "description": "Function resources location"
+            }
+        },
+        "location_abbr": {
+            "defaultValue": "WUS",
+            "type": "string",
+            "metadata": {
+                "description": "Default location prefix"
+            }
+        },
+        "app_insights_location": {
+            "defaultValue": "westus2",
+            "type": "string",
+            "metadata": {
+                "description": "App Insights account location"
+            }
+        },
+        "client_id": {
+            "defaultValue": "",
+            "type": "string",
+            "metadata": {
+                "description": "Azure Service Principal AppId"
+            }
+        },
+        "client_secret": {
+            "defaultValue": "",
+            "type": "string",
+            "metadata": {
+                "description": "Azure Service Principal Password"
+            }
+        },
+        "tenant_id": {
+            "defaultValue": "",
+            "type": "string",
+            "metadata": {
+                "description": "Azure Service Principal Tenant Id"
+            }
+        },
+        "app_setting_config_container": {
+            "defaultValue": "config-files",
+            "type": "string",
+            "metadata": {
+                "description": "Storage account container where config files are stored"
+            }
+        },
+        "app_setting_task_queue_name": {
+            "defaultValue": "resource-jobs",
+            "type": "string",
+            "metadata": {
+                "description": "Queue name where tasks are queued"
+            }
+        },
+        "app_setting_payload_queue_name": {
+            "defaultValue": "resource-payloads",
+            "type": "string",
+            "metadata": {
+                "description": "Queue name where resources are queued"
+            }
+        },
+        "app_setting_tag_updates_queue_name": {
+            "defaultValue": "resource-tag-upates",
+            "type": "string",
+            "metadata": {
+                "description": "Queue name where resource tag updates are queued"
+            }
+        },
+        "app_setting_queue_type": {
+            "defaultValue": "azure_storage_queue",
+            "type": "string",
+            "metadata": {
+                "description": "Queue Provider Type"
+            }
+        },
+        "app_setting_resource_storage_type": {
+            "defaultValue": "rest_storage_service",
+            "type": "string",
+            "metadata": {
+                "description": "Resource Storage Provider Type"
+            }
+        },
+        "app_setting_storage_container_type": {
+            "defaultValue": "azure_storage",
+            "type": "string",
+            "metadata": {
+                "description": "Storage provider type"
+            }
+        },
+        "app_setting_rest_storage_url": {
+            "defaultValue": "https://f14217h6lg.execute-api.us-west-2.amazonaws.com/v1/intake",
+            "type": "string",
+            "metadata": {
+                "description": "REST url of resource intake service"
+            }
+        }
+    },
+    "functions": [
+        {
+            "namespace": "cse",
+            "members": {
+                "uniqueName": {
+                    "parameters": [
+                        {
+                            "name": "prefix",
+                            "type": "string"
+                        },
+                        {
+                            "name": "location",
+                            "type": "string"
+                        },
+                        {
+                            "name": "env",
+                            "type": "string"
+                        },
+                        {
+                            "name": "app",
+                            "type": "string"
+                        },                        
+                        {
+                            "name": "type",
+                            "type": "string"
+                        }
+                    ],
+                    "output": {
+                        "type": "string",
+                        "value": "[concat(parameters('prefix'),'-',parameters('location'),'-',parameters('env'),'-',parameters('app'),'-',parameters('type'))]"
+                    }
+                },
+                "storageAccountName": {
+                    "parameters": [
+                        {
+                            "name": "prefix",
+                            "type": "string"
+                        },
+                        {
+                            "name": "location",
+                            "type": "string"
+                        },
+                        {
+                            "name": "env",
+                            "type": "string"
+                        },
+                        {
+                            "name": "app",
+                            "type": "string"
+                        },                        
+                        {
+                            "name": "type",
+                            "type": "string"
+                        }
+                    ],
+                    "output": {
+                        "type": "string",
+                        "value": "[toLower(concat(parameters('prefix'),parameters('location'),parameters('env'),parameters('app'),parameters('type')))]"
+                    }
+                }
+            }
+        }
+    ],
+    "variables": {
+        "function_app_name": "[cse.uniqueName(parameters('prefix'), parameters('location_abbr'), parameters('environment'), parameters('application_name'), 'Functions')]",
+        "app_service_plan_name": "[cse.uniqueName(parameters('prefix'), parameters('location_abbr'), parameters('environment'), parameters('application_name'), 'AppServicePlan')]",
+        "app_insights_name": "[cse.uniqueName(parameters('prefix'), parameters('location_abbr'), parameters('environment'), parameters('application_name'), 'AppInsights')]",
+        "storage_account_name": "[cse.storageAccountName(parameters('prefix'), parameters('location_abbr'), parameters('environment'), parameters('application_abbr'), 'SA')]"
+    },
+    "resources": [
+        {
+            "comments": "Function storage account",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[variables('storage_account_name')]",
+            "apiVersion": "2018-07-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": false,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Dynamic Linux hosting plan",
+            "type": "Microsoft.Web/serverfarms",
+            "sku": {
+                "name": "Y1",
+                "tier": "Dynamic",
+                "size": "Y1",
+                "family": "Y",
+                "capacity": 0
+            },
+            "kind": "functionapp",
+            "name": "[variables('app_service_plan_name')]",
+            "apiVersion": "2016-09-01",
+            "location": "[parameters('location')]",
+            "scale": null,
+            "properties": {
+                "name": "[variables('app_service_plan_name')]"
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Application Insights for function monitoring",
+            "type": "microsoft.insights/components",
+            "kind": "web",
+            "name": "[variables('app_insights_name')]",
+            "apiVersion": "2015-05-01",
+            "location": "[parameters('app_insights_location')]",
+            "scale": null,
+            "properties": {
+                "Application_Type": "web",
+                "ApplicationId": "[variables('app_insights_name')]"
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Function App",
+            "type": "Microsoft.Web/sites",
+            "kind": "functionapp,linux",
+            "name": "[variables('function_app_name')]",
+            "apiVersion": "2016-08-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('app_service_plan_name'))]",
+                "reserved": true,
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "AzureWebJobsDashboard",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storage_account_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storage_account_name')), '2016-01-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storage_account_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storage_account_name')), '2016-01-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~2"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "python"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(concat('microsoft.insights/components/', variables('app_insights_name'))).InstrumentationKey]"
+                        },
+                        {
+                            "name": "AZURE_CLIENT_ID",
+                            "value": "[parameters('client_id')]"
+                        },
+                        {
+                            "name": "AZURE_CLIENT_SECRET",
+                            "value": "[parameters('client_secret')]"
+                        },
+                        {
+                            "name": "AZURE_TENANT_ID",
+                            "value": "[parameters('tenant_id')]"
+                        },
+                        {
+                            "name": "AZURE_STORAGE_ACCOUNT",
+                            "value": "[variables('storage_account_name')]"
+                        },
+                        {
+                            "name": "AZURE_STORAGE_KEY",
+                            "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storage_account_name')), '2016-01-01').keys[0].value]"
+                        },
+                        {
+                            "name": "CONFIG_CONTAINER",
+                            "value": "[parameters('app_setting_config_container')]"
+                        },
+                        {
+                            "name": "PAYLOAD_QUEUE_NAME",
+                            "value": "[parameters('app_setting_payload_queue_name')]"
+                        },
+                        {
+                            "name": "TASK_QUEUE_NAME",
+                            "value": "[parameters('app_setting_task_queue_name')]"
+                        },
+                        {
+                            "name": "TAG_UPDATES_QUEUE_NAME",
+                            "value": "[parameters('app_setting_tag_updates_queue_name')]"
+                        },
+                        {
+                            "name": "QUEUE_TYPE",
+                            "value": "[parameters('app_setting_queue_type')]"
+                        },
+                        {
+                            "name": "RESOURCE_STORAGE_TYPE",
+                            "value": "[parameters('app_setting_resource_storage_type')]"
+                        },
+                        {
+                            "name": "STORAGE_CONTAINER_TYPE",
+                            "value": "[parameters('app_setting_storage_container_type')]"
+                        },
+                        {
+                            "name": "REST_STORAGE_URL",
+                            "value": "[parameters('app_setting_rest_storage_url')]"
+                        }
+                    ]
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Insights/components', variables('app_insights_name'))]",
+                "[resourceId('Microsoft.Web/serverfarms', variables('app_service_plan_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storage_account_name'))]"
+            ]
+        }
+    ]
+}

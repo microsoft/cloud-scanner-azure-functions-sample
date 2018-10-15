@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"prefix": {
+			"value": "CSE"
+		},
+		"application_name": {
+			"value": "CloudScanner"
+		},
+		"application_abbr": {
+			"value": "CS"
+		},
+		"environment": {
+			"value": "DEV"
+		},
+		"location": {
+			"value": "westus"
+		},
+		"app_insights_location": {
+			"value": "westus2"
+		},
+		"client_id": {
+			"value": "abc123"
+		},
+		"client_secret": {
+			"value": "xyz=="
+		},
+		"tenant_id": {
+			"value": "CCC"
+		}
+	}
+}
