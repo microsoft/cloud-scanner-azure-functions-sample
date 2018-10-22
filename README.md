@@ -7,7 +7,7 @@ This is an example Azure Function App that demonstrates the use of the [cloud-sc
     ```
     python3.6 -m virtualenv env
     source env/bin/activate
-    (env) pip install -r requirements.txt
+    (env) pip install --index-url https://test.pypi.org/simple/ -r requirements-test.txt --extra-index-url https://pypi.org/simple/ -r requirements.txt
     ```
    If running on Windows CMD Prompt/Powershell:
    ```
