@@ -1,0 +1,3 @@
+cloud-scanner
+cloud-scanner-azure
+cloud-scanner-generic

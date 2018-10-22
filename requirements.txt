@@ -1,6 +1,3 @@
 azure-functions==1.0.0a4
 azure-functions-worker==1.0.0a4
--e ../cloud-scanner-generic
--e ../cloud-scanner
--e ../cloud-scanner-azure
 -e config-generator
