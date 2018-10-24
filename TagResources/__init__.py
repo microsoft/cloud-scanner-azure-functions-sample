@@ -1,9 +1,12 @@
-from cloud_scanner.services import ResourceTagger
+import sys
+import os
+sys.path.append(os.path.abspath(""))
+
+import settings
 from azure.functions import QueueMessage
+from cloud_scanner.services import ResourceTagger
 from cloud_scanner_azure import services
 from cloud_scanner_generic import services
-
-from .. import settings
 
 
 def main(msg: QueueMessage):

@@ -1,9 +1,10 @@
-# Loads all environment variables required
-from .. import settings
+import sys
+import os
+sys.path.append(os.path.abspath(""))
+
+import settings
 import azure.functions
 from cloud_scanner.services import ResourceTagger
-
-# Load and register required services
 from cloud_scanner_azure import services
 from cloud_scanner_generic import services
 

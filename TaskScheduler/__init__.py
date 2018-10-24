@@ -1,5 +1,9 @@
+import sys
+import os
+sys.path.append(os.path.abspath(""))
+
+import settings
 import azure.functions
-from .. import settings
 from cloud_scanner.services import TaskScheduler
 from cloud_scanner_azure import services
 from cloud_scanner_generic import services
