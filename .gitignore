@@ -109,3 +109,4 @@ obj/
 local.settings.json
 
 .vscode/
+docs/source/generated
