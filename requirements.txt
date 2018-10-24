@@ -1,3 +1,4 @@
 azure-functions==1.0.0a4
 azure-functions-worker==1.0.0a4
 -e config-generator
+Sphinx

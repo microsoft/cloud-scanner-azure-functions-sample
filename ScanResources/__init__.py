@@ -3,7 +3,8 @@ from cloud_scanner.services import ResourceScanner
 from cloud_scanner_azure import services
 from cloud_scanner_generic import services
 
-from .. import settings
+from dotenv import load_dotenv
+load_dotenv('../.env')
 
 
 async def main(msg: azure.functions.QueueMessage):
