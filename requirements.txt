@@ -1,3 +1,5 @@
 azure-functions==1.0.0a4
 azure-functions-worker==1.0.0a4
+flake8
+Sphinx
 -e config-generator
