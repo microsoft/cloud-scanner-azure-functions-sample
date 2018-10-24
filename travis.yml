@@ -6,16 +6,3 @@ install:
 script:
   - pytest
   - flake8 --ignore=E402,F401,F811 RunRules ScanResources StoreResources TagResources TaskScheduler tests
-before_deploy:
-  # Generate Sphinx docs
-  - make sphinx
-deploy:
-  # Deploy Sphinx docs to github pages
-  - provider: pages
-    skip_cleanup: true
-    local-dir: docs/build/html
-    github-token:
-      secure: "N6UdBoAS9P08XDZUA9LENpz2W4x6n8H3iMhwoqn4xjAr3JjQNrA6f/a6aep7cjx8h+Ao+d5ueTsViBi5cZqq+LYjhXxycxvmvKA18gy/nYw2Z9si5zgmmiKDGPrUzvJBnqrPCLg2sGcxf1Uvp9hd6jjf6ujZy1ngQa3UC/MPDSyGREAufewRL7JxEJvZL7+NY2wYo+DoKBOOmzPPidAakFF9ja6v990g85/1eUH9tWDpZVGREGKbf8IJOvw/4d3PtJGHtyHVcvQeuDYpLgBsDTEVvgJQWeCPyZEvXHZLDJjszrlql9A+jv6fJMKddi6MLEPOHekftZBKmeTbRya1Qzgxf+aykVRfPPBE3b2hwnWkpkN1hkxHY+2jPi55u7H4mRKsroLkBDa++K2u5uJ4YFJI2jBb3T9JNgezuAmJYSuexP5jkZzHoc03+MxqvJXD3W+z2T9oqUWl70Gq+DTJhxg782k7QmrAvH1DnrjmkVDIKgRF3HnxFTwaMhC3Lq8bveS5gH/b4gN8DviJGURiwxB2nbuDgoyknz2mQvvAtc8Vic7fnf0qrO3SmUyU/s1+ZYWm+1V/caJeyF0ClXAZ79NjBlZrqg8HRTKf4QjsFOV9X28JVmpCXiW+KXEncWUbi6nUhXMmnwy0mcWhYUCvbiZpMoYhDpHhIBOzDUcmHEk="
-    keep-history: true
-    on:
-      tags: true
