@@ -4,6 +4,21 @@
 
 This is an example Azure Function App that demonstrates the use of the [cloud-scanner](https://github.com/Microsoft/cloud-scanner) library and its providers. [cloud-scanner](https://github.com/Microsoft/cloud-scanner) is a Python package that pulls cloud resources from different providers (Azure, AWS, GCP) and puts the metadata into data stores.
 
+**Note: This library is NOT affiliated with the Azure team at Microsoft and was developed by the Commercial Software Engineering team as a tool for the Open Source community to use and contribute to as they see fit. Use at your own risk!**
+
+## Related Projects
+The following are a list of related projects that are dependencies for the Azure Functions sample:
+
+1. [`cloud-scanner`](https://github.com/Microsoft/cloud-scanner)
+    
+    Core library components for cloud-scanner project
+2. [`cloud-scanner-azure`](https://github.com/Microsoft/cloud-scanner-azure)
+
+    Azure components for cloud-scanner project. Includes Azure support for discovering Azure resources in addition to storage and workflow components for hosting on Azure
+3. [`cloud-scanner-generic`](https://github.com/Microsoft/cloud-scanner-generic)
+
+    Generic components for cloud-scanner project including MySql, ElasticSearch and more
+
 ## Running Locally
 1. Create Python 3.6 virtualenv `env` with all dependencies installed
     ```
