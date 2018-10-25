@@ -65,6 +65,7 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+docs/source/generated
 
 # PyBuilder
 target/
@@ -109,3 +110,4 @@ obj/
 local.settings.json
 
 .vscode/
+docs/source/generated
