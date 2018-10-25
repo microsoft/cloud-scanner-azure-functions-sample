@@ -1,19 +1,36 @@
-# Cloud Resource Scanner - Azure Function App
+# Cloud Resource Scanner - Azure Functions Sample App
+
+[![Build Status](https://travis-ci.com/Microsoft/cloud-scanner-azure-functions-sample.svg?branch=master)](https://travis-ci.com/Microsoft/cloud-scanner-azure-functions-sample)
 
 This is an example Azure Function App that demonstrates the use of the [cloud-scanner](https://github.com/Microsoft/cloud-scanner) library and its providers. [cloud-scanner](https://github.com/Microsoft/cloud-scanner) is a Python package that pulls cloud resources from different providers (Azure, AWS, GCP) and puts the metadata into data stores.
+
+**Note: This library is NOT affiliated with the Azure team at Microsoft and was developed by the Commercial Software Engineering team as a tool for the Open Source community to use and contribute to as they see fit. Use at your own risk!**
+
+## Related Projects
+The following are a list of related projects that are dependencies for the Azure Functions sample:
+
+1. [`cloud-scanner`](https://github.com/Microsoft/cloud-scanner)
+    
+    Core library components for cloud-scanner project
+2. [`cloud-scanner-azure`](https://github.com/Microsoft/cloud-scanner-azure)
+
+    Azure components for cloud-scanner project. Includes Azure support for discovering Azure resources in addition to storage and workflow components for hosting on Azure
+3. [`cloud-scanner-generic`](https://github.com/Microsoft/cloud-scanner-generic)
+
+    Generic components for cloud-scanner project including MySql, ElasticSearch and more
 
 ## Running Locally
 1. Create Python 3.6 virtualenv `env` with all dependencies installed
     ```
     python3.6 -m virtualenv env
     source env/bin/activate
-    (env) pip install --index-url https://test.pypi.org/simple/ -r requirements-test.txt --extra-index-url https://pypi.org/simple/ -r requirements.txt
+    (env) pip install -r requirements.txt
     ```
    If running on Windows CMD Prompt/Powershell:
    ```
    python3.6 -m virtualenv env
    .env\Scripts\activate
-   (env) pip install --index-url https://test.pypi.org/simple/ -r requirements-test.txt --extra-index-url https://pypi.org/simple/ -r requirements.txt
+   (env) pip install -r requirements.txt
    ```
 2. Create an [Azure Service Principal](docs/md/service-principal.md)
 3. Create `.env` file in root directory and populate with appropriate data:
@@ -75,7 +92,7 @@ This is an example Azure Function App that demonstrates the use of the [cloud-sc
 
 ## Publish Function App to Azure
 
-# Contributing
+## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
