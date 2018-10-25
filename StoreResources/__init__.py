@@ -1,15 +1,13 @@
-import sys
-import os
-sys.path.append(os.path.abspath(""))
-
-import settings
-from azure.functions import QueueMessage
 from cloud_scanner.services import ResourceStorage
+from azure.functions import QueueMessage
 from cloud_scanner_azure import services
 from cloud_scanner_generic import services
 
+from dotenv import load_dotenv
+load_dotenv('../.env')
 
-def main(msg: QueueMessage):
+
+async def main(msg: QueueMessage):
     """
     Process payload from queue to store in registered storage provider
     :param msg: Resource payload from queue

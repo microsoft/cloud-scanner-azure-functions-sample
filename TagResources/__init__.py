@@ -1,12 +1,10 @@
-import sys
-import os
-sys.path.append(os.path.abspath(""))
-
-import settings
-from azure.functions import QueueMessage
 from cloud_scanner.services import ResourceTagger
+from azure.functions import QueueMessage
 from cloud_scanner_azure import services
 from cloud_scanner_generic import services
+
+from dotenv import load_dotenv
+load_dotenv('../.env')
 
 
 def main(msg: QueueMessage):
