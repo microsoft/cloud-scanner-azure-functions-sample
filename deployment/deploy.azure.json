@@ -2,15 +2,15 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "prefix": {
+            "type": "string"
+        },
         "environment": {
             "type": "string",
             "defaultValue": "dev",
             "metadata": {
                 "description": "The environment for this application"
             }
-        },
-        "prefix": {
-            "type": "string"
         },
         "application_name": {
             "type": "string",
@@ -190,7 +190,6 @@
     ],
     "variables": {
         "function_app_name": "[cse.uniqueName(parameters('prefix'), parameters('location_abbr'), parameters('environment'), parameters('application_name'), 'Functions')]",
-        "app_service_plan_name": "[cse.uniqueName(parameters('prefix'), parameters('location_abbr'), parameters('environment'), parameters('application_name'), 'AppServicePlan')]",
         "app_insights_name": "[cse.uniqueName(parameters('prefix'), parameters('location_abbr'), parameters('environment'), parameters('application_name'), 'AppInsights')]",
         "storage_account_name": "[cse.storageAccountName(parameters('prefix'), parameters('location_abbr'), parameters('environment'), parameters('application_abbr'), 'SA')]"
     },
@@ -206,49 +205,9 @@
             "name": "[variables('storage_account_name')]",
             "apiVersion": "2018-07-01",
             "location": "[parameters('location')]",
-            "tags": {},
-            "scale": null,
             "properties": {
-                "networkAcls": {
-                    "bypass": "AzureServices",
-                    "virtualNetworkRules": [],
-                    "ipRules": [],
-                    "defaultAction": "Allow"
-                },
-                "supportsHttpsTrafficOnly": false,
-                "encryption": {
-                    "services": {
-                        "file": {
-                            "enabled": true
-                        },
-                        "blob": {
-                            "enabled": true
-                        }
-                    },
-                    "keySource": "Microsoft.Storage"
-                }
-            },
-            "dependsOn": []
-        },
-        {
-            "comments": "Dynamic Linux hosting plan",
-            "type": "Microsoft.Web/serverfarms",
-            "sku": {
-                "name": "Y1",
-                "tier": "Dynamic",
-                "size": "Y1",
-                "family": "Y",
-                "capacity": 0
-            },
-            "kind": "functionapp",
-            "name": "[variables('app_service_plan_name')]",
-            "apiVersion": "2016-09-01",
-            "location": "[parameters('location')]",
-            "scale": null,
-            "properties": {
-                "name": "[variables('app_service_plan_name')]"
-            },
-            "dependsOn": []
+                "accountType": "Standard_LRS"
+            }
         },
         {
             "comments": "Application Insights for function monitoring",
@@ -267,15 +226,27 @@
         {
             "comments": "Function App",
             "type": "Microsoft.Web/sites",
-            "kind": "functionapp,linux",
             "name": "[variables('function_app_name')]",
-            "apiVersion": "2016-08-01",
+            "apiVersion": "2016-03-01",
+            "kind": "functionapp,linux",
             "location": "[parameters('location')]",
             "properties": {
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('app_service_plan_name'))]",
+                "clientAffinityEnabled": false,
                 "reserved": true,
                 "siteConfig": {
                     "appSettings": [
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storage_account_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storage_account_name')), '2015-05-01-preview').key1)]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[concat(toLower(variables('function_app_name')), 'b518')]"
+                        },
+                        {
+                            "name": "WEBSITE_NODE_DEFAULT_VERSION",
+                            "value": "8.11.1"
+                        },
                         {
                             "name": "AzureWebJobsDashboard",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storage_account_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storage_account_name')), '2016-01-01').keys[0].value)]"
@@ -353,7 +324,6 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Insights/components', variables('app_insights_name'))]",
-                "[resourceId('Microsoft.Web/serverfarms', variables('app_service_plan_name'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storage_account_name'))]"
             ]
         }

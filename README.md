@@ -1,4 +1,4 @@
-# Cloud Resource Scanner - Azure Functions Sample App
+# Cloud Scanner - Azure Functions Sample App
 
 [![Build Status](https://travis-ci.com/Microsoft/cloud-scanner-azure-functions-sample.svg?branch=master)](https://travis-ci.com/Microsoft/cloud-scanner-azure-functions-sample)
 
@@ -91,6 +91,28 @@ The following are a list of related projects that are dependencies for the Azure
     ```
 
 ## Publish Function App to Azure
+The Azure Functions Sample runs on a Linux consumption plan with python support.  The ARM template is complete and deploys the following resources:
+- Functions App
+- Linux Consumption App Service Plan
+- Storage Account
+- Application Insights
+
+Automatically deploy using the `deployments/deploy.ps1` or the following Azure CLI commands.
+```powershell
+$resourceGroupName = <resource-group-name>
+az group create -l westus -n $resourceGroupName
+
+az group deployment create 
+    --resource-group $resourceGroupName 
+    --name cloud-scanner 
+    --template-file deploy.azure.json 
+    --parameters parameters.json 
+    --parameters 
+        prefix=$prefix 
+        location_abbr=$locationAbbr 
+        environment=$environment 
+        application_name=$applicationName
+```
 
 ## Contributing
 
