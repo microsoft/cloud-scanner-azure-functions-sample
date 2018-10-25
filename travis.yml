@@ -2,7 +2,7 @@ language: python
 python:
   - "3.6"
 install:
-  - pip install --index-url https://test.pypi.org/simple/ -r requirements-test.txt --extra-index-url https://pypi.org/simple/ -r requirements.txt
+  - pip install -r requirements.txt
 script:
   - pytest
   - flake8 --ignore=E402,F401,F811 RunRules ScanResources StoreResources TagResources TaskScheduler tests
