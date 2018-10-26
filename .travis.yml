@@ -12,13 +12,9 @@ matrix:
         - sudo apt-get install -y apt-transport-https
         - sudo apt-get update && sudo apt-get install -y azure-cli
         - npm i -g azure-functions-core-tools --unsafe-perm true
-      deploy:
-        provider: script
-        script:
-          - az login --service-principal --username "$APP_ID" --password "$PASSWORD" --tenant "$TENANT_ID"
-          - az account get-access-token --query "accessToken" | func azure functionapp publish $APP_NAME --build-native-deps --force
-        on:
-          branch: master
+      script:
+        - az login --service-principal --username "$APP_ID" --password "$PASSWORD" --tenant "$TENANT_ID"
+        - az account get-access-token --query "accessToken" | func azure functionapp publish $APP_NAME --build-native-deps --force
     - language: python
       python:
         - "3.6"
