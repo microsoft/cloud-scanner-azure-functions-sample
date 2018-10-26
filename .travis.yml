@@ -1,20 +1,47 @@
-language: python
-python:
-  - "3.6"
-install:
-  - pip install -r requirements.txt
-  - pip install -r requirements-dev.txt
-script:
-  - pytest
-  - make sphinx
-  - flake8 --ignore=E402,F401,F811 RunRules ScanResources StoreResources TagResources TaskScheduler tests
-before_deploy:
-  - make sphinx
-deploy:
-  - provider: pages
-    skip_cleanup: true
-    local-dir: docs/build/html
-    github-token: $GITHUB_TOKEN
-    keep-history: true
-    on:
-      branch: master
+matrix:
+  include:
+    - language: python
+      python:
+        - "3.6"
+      install:
+        - pip install -r requirements.txt
+        - pip install -r requirements-dev.txt
+      script:
+        - pytest
+        - make sphinx
+        - flake8 --ignore=E402,F401,F811 RunRules ScanResources StoreResources TagResources TaskScheduler tests
+      before_deploy:
+        - make sphinx
+      deploy:
+        - provider: pages
+          skip_cleanup: true
+          local-dir: docs/build/html
+          github-token: $GITHUB_TOKEN
+          keep-history: true
+          on:
+            branch: master
+    - sudo: required
+
+      language: node_js
+
+      node_js:
+        - "8"
+
+      services:
+        - docker
+
+      before_install:
+        - echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
+        - curl -L https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+        - sudo apt-get install -y apt-transport-https
+        - sudo apt-get update && sudo apt-get install -y azure-cli
+        - npm i -g azure-functions-core-tools --unsafe-perm true
+
+
+      deploy:
+        provider: script
+        script:
+          - az login --service-principal --username "$APP_ID" --password "$PASSWORD" --tenant "$TENANT_ID"
+          - az account get-access-token --query "accessToken" | func azure functionapp publish $APP_NAME --build-native-deps
+        on:
+          branch: master
