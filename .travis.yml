@@ -18,4 +18,4 @@ before_install:
 
 script:
   - az login --service-principal --username "$APP_ID" --password "$PASSWORD" --tenant "$TENANT_ID"
-  - az account get-access-token --query "accessToken" | func azure functionapp publish $APP_NAME --build-native-deps
+  - az account get-access-token --query "accessToken" | func azure functionapp publish $APP_NAME --build-native-deps --force
