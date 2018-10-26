@@ -25,12 +25,14 @@ The following are a list of related projects that are dependencies for the Azure
     python3.6 -m virtualenv env
     source env/bin/activate
     (env) pip install -r requirements.txt
+    (env) pip install -r requirements-dev.txt
     ```
    If running on Windows CMD Prompt/Powershell:
    ```
    python3.6 -m virtualenv env
    .env\Scripts\activate
    (env) pip install -r requirements.txt
+   (env) pip install -r requirements-dev.txt
    ```
 2. Create an [Azure Service Principal](docs/md/service-principal.md)
 3. Create `.env` file in root directory and populate with appropriate data:
