@@ -18,6 +18,7 @@ matrix:
       script: skip
       deploy:
         - provider: script
+          skip_cleanup: true
           script: bash deployment/deploy.sh
           on:
             branch: master
