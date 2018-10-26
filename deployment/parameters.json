@@ -17,17 +17,20 @@
 		"location": {
 			"value": "westus"
 		},
+		"location_abbr": {
+			"value" : "WUS"
+		},
 		"app_insights_location": {
 			"value": "westus2"
 		},
 		"client_id": {
-			"value": "abc123"
+			"value": ""
 		},
 		"client_secret": {
-			"value": "xyz=="
+			"value": ""
 		},
 		"tenant_id": {
-			"value": "CCC"
+			"value": ""
 		}
 	}
 }

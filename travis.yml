@@ -1,9 +1,0 @@
-language: python
-python:
-  - "3.6"
-install:
-  - pip install -r requirements.txt
-script:
-  - pytest
-  - make sphinx
-  - flake8 --ignore=E402,F401,F811 RunRules ScanResources StoreResources TagResources TaskScheduler tests

@@ -1,6 +1,5 @@
 {
     "scriptFile": "__init__.py",
-
     "bindings": [
       {
         "type": "timerTrigger",
@@ -9,5 +8,5 @@
         "schedule": "0 */5 * * * *"
       }
     ],
-    "disabled": true
+    "disabled": "IS_DISABLED"
 }
