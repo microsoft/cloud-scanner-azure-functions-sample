@@ -9,15 +9,13 @@ matrix:
         - "8"
       services:
         - docker
-      before_install:
+      before_deploy:
         - echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
         - curl -L https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
         - sudo apt-get install -y apt-transport-https
         - sudo apt-get update && sudo apt-get install -y azure-cli
         - npm i -g azure-functions-core-tools --unsafe-perm true
-      script:
-        - az login --service-principal --username "$AZ_SP_ID" --password "$AZ_SP_SECRET" --tenant "$AZ_TENANT_ID"
-        - az account get-access-token --query "accessToken" | func azure functionapp publish $AZ_FUNCTIONS_APP_NAME --build-native-deps --force
+      script: skip
     - language: python
       python:
         - "3.6"
@@ -36,5 +34,11 @@ matrix:
           local-dir: docs/build/html
           github-token: $GITHUB_TOKEN
           keep-history: true
+          on:
+            branch: master
+        - provider: script
+          script:
+            - az login --service-principal --username "$AZ_SP_ID" --password "$AZ_SP_SECRET" --tenant "$AZ_TENANT_ID"
+            - az account get-access-token --query "accessToken" | func azure functionapp publish $AZ_FUNCTIONS_APP_NAME --build-native-deps --force
           on:
             branch: master
