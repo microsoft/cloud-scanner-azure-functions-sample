@@ -93,28 +93,6 @@ The following are a list of related projects that are dependencies for the Azure
     ```
 
 ## Publish Function App to Azure
-The Azure Functions Sample runs on a Linux consumption plan with python support.  The ARM template is complete and deploys the following resources:
-- Functions App
-- Linux Consumption App Service Plan
-- Storage Account
-- Application Insights
-
-Automatically deploy using the `deployments/deploy.ps1` or the following Azure CLI commands.
-```powershell
-$resourceGroupName = <resource-group-name>
-az group create -l westus -n $resourceGroupName
-
-az group deployment create 
-    --resource-group $resourceGroupName 
-    --name cloud-scanner 
-    --template-file deploy.azure.json 
-    --parameters parameters.json 
-    --parameters 
-        prefix=$prefix 
-        location_abbr=$locationAbbr 
-        environment=$environment 
-        application_name=$applicationName
-```
 
 #### Azure Resources
 
@@ -145,7 +123,7 @@ az group deployment create
 
 This repo is set up to use Travis CI to deploy code from the `master` branch. In order for this to work properly, you will need to use the service principal created previously (or create a new one) and add the following environment variables to your Travis settings with the appropriate values: 
 
-```
+```bash
 AZ_SP_ID=<service-principal-app-id>
 AZ_SP_SECRET=<service-principal-secret>
 AZ_TENANT_ID=<service-principal-tenant-id>
@@ -153,10 +131,16 @@ GITHUB_TOKEN=<github-token>
 AZ_FUNCTIONS_APP_NAME=<name-of-functions-app>
 ```
 
+Login to your Azure account with standard username or password or with the service principal you created
+```bash
+az login --service-principal --username "$AZ_APP_ID" --password "$AZ_SP_SECRET" --tenant "$AZ_TENANT_ID"
+az account get-access-token --query "accessToken"
+```
+
 To deploy from your machine, create and activate your virtual environment and run:
 
 ```bash
-func azure functionapp publish <your-function-app-name> --build-native-deps --force
+func azure functionapp publish $AZ_FUNCTIONS_APP_NAME --build-native-deps --force
 ```
 
 ## Contributing
