@@ -21,7 +21,7 @@ matrix:
           skip_cleanup: true
           script: bash deployment/deploy.sh
           on:
-            branch: wabrez/travis-deploy-test
+            branch: master
     - language: python
       python:
         - "3.6"
