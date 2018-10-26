@@ -18,9 +18,10 @@ matrix:
       script: skip
       deploy:
         - provider: script
+          skip_cleanup: true
           script: bash deployment/deploy.sh
           on:
-            branch: master
+            branch: wabrez/travis-deploy-test
     - language: python
       python:
         - "3.6"
