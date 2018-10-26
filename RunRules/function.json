@@ -8,5 +8,5 @@
         "schedule": "0 */5 * * * *"
       }
     ],
-    "disabled": true
+    "disabled": "IS_DISABLED"
 }
