@@ -5,8 +5,8 @@ setup(
     version='0.1',
     description="Cloud Scanner - Config Generator",
     url="",
-    author="Tanner Barlow",
-    author_email="tanner.barlow12@gmail.com",
+    author="Microsoft",
+    author_email="cscan@microsoft.com",
     license="MIT",
     packages=['cloud_scanner_config_generator'],
     entry_points={
